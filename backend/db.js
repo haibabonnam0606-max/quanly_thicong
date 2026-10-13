@@ -192,6 +192,29 @@ async function initDbSchema(maxRetries = 10, delayMs = 1500) {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
 
+    // 9. Tạo bảng daily_volume_reports (S-26 / SCRUM-118: Báo cáo KL hằng ngày và lũy kế)
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS daily_volume_reports (
+        id            INT AUTO_INCREMENT PRIMARY KEY,
+        project_id    INT            NOT NULL,
+        work_item_id  INT            NOT NULL,
+        reported_by   INT            NOT NULL,
+        report_date   DATE           NOT NULL,
+        quantity      DECIMAL(14, 4) NOT NULL,
+        note          TEXT           NULL,
+        reported_at   TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
+        updated_at    TIMESTAMP      DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        UNIQUE KEY uq_dvr_team_item_date (project_id, work_item_id, reported_by, report_date),
+        INDEX idx_dvr_project_item (project_id, work_item_id),
+        INDEX idx_dvr_project_date (project_id, report_date),
+        INDEX idx_dvr_reported_by  (reported_by),
+        CONSTRAINT fk_dvr_project   FOREIGN KEY (project_id)   REFERENCES projects(id)   ON DELETE CASCADE,
+        CONSTRAINT fk_dvr_work_item FOREIGN KEY (work_item_id) REFERENCES work_items(id) ON DELETE CASCADE,
+        CONSTRAINT fk_dvr_user      FOREIGN KEY (reported_by)  REFERENCES users(id)      ON DELETE RESTRICT,
+        CONSTRAINT chk_dvr_quantity CHECK (quantity >= 0)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `);
+
     // Seed 7 vai trò thi công xây dựng
     for (const r of SEED_ROLES) {
       await pool.query(`

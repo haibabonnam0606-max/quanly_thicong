@@ -74,6 +74,10 @@ app.get('/schedule', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/schedule.html'));
 });
 
+app.get('/daily-volume', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/daily-volume.html'));
+});
+
 // Middleware xác thực token phiên
 const { authenticate } = require('./src/utils/rbac');
 app.use(authenticate);
@@ -94,6 +98,10 @@ app.use("/api", dependencyRoutes(db));
 
 const schedulingRoutes = require("./src/routes/schedulingRoutes");
 app.use("/api", schedulingRoutes(db));
+
+// S-26 (SCRUM-118): Báo cáo khối lượng hằng ngày và lũy kế
+const dailyVolumeRoutes = require("./src/routes/dailyVolumeRoutes");
+app.use("/api", dailyVolumeRoutes(db));
 
 app.listen(PORT, async () => {
   console.log(`===================================================`);

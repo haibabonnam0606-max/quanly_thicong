@@ -4,7 +4,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "lint": "node -c server.js wbs_routes.js src/routes/taskRoutes.js src/routes/dependencyRoutes.js src/routes/schedulingRoutes.js src/routes/projectRoutes.js src/repositories/dependencyRepository.js src/repositories/scheduleResultRepository.js src/services/dependencyService.js src/utils/rbac.js src/domain/scheduling/graph.js src/domain/scheduling/topologicalSort.js src/domain/scheduling/contracts.js src/domain/scheduling/schedulerService.js src/algorithms/dependencyConstraints.js src/algorithms/forwardPass.js src/algorithms/topologicalSort.js src/algorithms/backwardPass.js middlewares/checkCycleMiddleware.js services/cycleDetectorService.js",
+    "lint": "node -c server.js wbs_routes.js src/routes/taskRoutes.js src/routes/dependencyRoutes.js src/routes/schedulingRoutes.js src/routes/projectRoutes.js src/routes/dailyVolumeRoutes.js src/repositories/dependencyRepository.js src/repositories/scheduleResultRepository.js src/repositories/dailyVolumeRepository.js src/services/dependencyService.js src/utils/rbac.js src/domain/scheduling/graph.js src/domain/scheduling/topologicalSort.js src/domain/scheduling/contracts.js src/domain/scheduling/schedulerService.js src/algorithms/dependencyConstraints.js src/algorithms/forwardPass.js src/algorithms/topologicalSort.js src/algorithms/backwardPass.js middlewares/checkCycleMiddleware.js services/cycleDetectorService.js",
     "test": "node --test",
     "benchmark": "node scripts/run_real_benchmark.js"
   },
